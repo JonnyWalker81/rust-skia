@@ -280,7 +280,7 @@ impl<N: NativeDrop> Handle<N> {
     }
 }
 
-pub(crate) trait ReplaceWith<Other> {
+pub trait ReplaceWith<Other> {
     fn replace_with(&mut self, other: Other) -> Other;
 }
 
@@ -292,7 +292,7 @@ impl<N: NativeDrop> ReplaceWith<Handle<N>> for N {
 
 /// Constructs a C++ object in place by calling a lambda that is meant to initialize
 /// the pointer to the Rust memory provided as a pointer.
-pub(crate) fn construct<N>(construct: impl FnOnce(*mut N)) -> N {
+pub fn construct<N>(construct: impl FnOnce(*mut N)) -> N {
     let mut instance = MaybeUninit::uninit();
     construct(instance.as_mut_ptr());
     unsafe { instance.assume_init() }
@@ -332,7 +332,7 @@ impl<N: NativeDrop + NativeHash> Hash for Handle<N> {
     }
 }
 
-pub(crate) trait NativeSliceAccess<N: NativeDrop> {
+pub trait NativeSliceAccess<N: NativeDrop> {
     fn native(&self) -> &[N];
     fn native_mut(&mut self) -> &mut [N];
 }
@@ -357,12 +357,12 @@ impl<N: NativeDrop> NativeSliceAccess<N> for [Handle<N>] {
 
 /// A trait that supports retrieving a pointer from an Option<Handle<Native>>.
 /// Returns a null pointer if the Option is None.
-pub(crate) trait NativePointerOrNull<N> {
+pub trait NativePointerOrNull<N> {
     fn native_ptr_or_null(&self) -> *const N;
     unsafe fn native_ptr_or_null_mut_force(&self) -> *mut N;
 }
 
-pub(crate) trait NativePointerOrNullMut<N> {
+pub trait NativePointerOrNullMut<N> {
     fn native_ptr_or_null_mut(&mut self) -> *mut N;
 }
 
@@ -397,11 +397,11 @@ where
     }
 }
 
-pub(crate) trait NativePointerOrNullMut2<N> {
+pub trait NativePointerOrNullMut2<N> {
     fn native_ptr_or_null_mut(&mut self) -> *mut N;
 }
 
-pub(crate) trait NativePointerOrNull2<N> {
+pub trait NativePointerOrNull2<N> {
     fn native_ptr_or_null(&self) -> *const N;
 }
 
@@ -573,7 +573,7 @@ impl<N: NativeRefCounted + NativePartialEq> PartialEq for RCHandle<N> {
 }
 
 /// A trait that consumes self and converts it to a ptr to the native type.
-pub(crate) trait IntoPtr<N> {
+pub trait IntoPtr<N> {
     fn into_ptr(self) -> *mut N;
 }
 
@@ -586,7 +586,7 @@ impl<N: NativeRefCounted> IntoPtr<N> for RCHandle<N> {
 }
 
 /// A trait that consumes self and converts it to a ptr to the native type or null.
-pub(crate) trait IntoPtrOrNull<N> {
+pub trait IntoPtrOrNull<N> {
     fn into_ptr_or_null(self) -> *mut N;
 }
 
@@ -597,7 +597,7 @@ impl<N: NativeRefCounted> IntoPtrOrNull<N> for Option<RCHandle<N>> {
 }
 
 /// Trait to compute how many bytes the elements of this type occupy in memory.
-pub(crate) trait ElementsSizeOf {
+pub trait ElementsSizeOf {
     fn elements_size_of(&self) -> usize;
 }
 
@@ -690,7 +690,7 @@ pub trait NativeTransmutable<NT: Sized>: Sized {
     }
 }
 
-pub(crate) trait NativeTransmutableSliceAccess<NT: Sized> {
+pub trait NativeTransmutableSliceAccess<NT: Sized> {
     fn native(&self) -> &[NT];
     fn native_mut(&mut self) -> &mut [NT];
 }
@@ -715,7 +715,7 @@ impl<NT, RustT> NativeTransmutable<Option<&[NT]>> for Option<&[RustT]> where
 {
 }
 
-pub(crate) trait NativeTransmutableOptionSliceAccessMut<NT: Sized> {
+pub trait NativeTransmutableOptionSliceAccessMut<NT: Sized> {
     fn native_mut(&mut self) -> &mut Option<&mut [NT]>;
 }
 
@@ -733,11 +733,11 @@ where
 // that may be null.
 //
 
-pub(crate) trait AsPointerOrNull<PointerT> {
+pub trait AsPointerOrNull<PointerT> {
     fn as_ptr_or_null(&self) -> *const PointerT;
 }
 
-pub(crate) trait AsPointerOrNullMut<PointerT> {
+pub trait AsPointerOrNullMut<PointerT> {
     fn as_ptr_or_null(&self) -> *const PointerT;
     fn as_ptr_or_null_mut(&mut self) -> *mut PointerT;
 }
@@ -828,7 +828,7 @@ impl<'a, H> Borrows<'a, H> {
     }
 }
 
-pub(crate) trait BorrowsFrom: Sized {
+pub trait BorrowsFrom: Sized {
     fn borrows<D: ?Sized>(self, _dep: &D) -> Borrows<Self>;
 }
 
