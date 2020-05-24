@@ -30,6 +30,7 @@ pub use crate::docs::*;
 pub use crate::effects::*;
 pub use crate::modules::*;
 pub use crate::pathops::*;
+pub use crate::prelude::*;
 
 #[cfg(test)]
 mod transmutation_tests {
