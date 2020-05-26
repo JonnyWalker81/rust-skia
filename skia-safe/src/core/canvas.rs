@@ -135,6 +135,9 @@ pub struct TopLayerPixels<'a> {
 #[repr(transparent)]
 pub struct Canvas(SkCanvas);
 
+unsafe impl Send for Canvas {}
+unsafe impl Sync for Canvas {}
+
 impl NativeAccess<SkCanvas> for Canvas {
     fn native(&self) -> &SkCanvas {
         &self.0

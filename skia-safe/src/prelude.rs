@@ -489,7 +489,7 @@ impl<N: NativeRefCounted> RCHandle<N> {
     /// Returns None if the pointer is null.
     /// Does not increase the reference count.
     #[inline]
-    pub(crate) fn from_ptr(ptr: *mut N) -> Option<Self> {
+    pub fn from_ptr(ptr: *mut N) -> Option<Self> {
         if !ptr.is_null() {
             Some(RCHandle(ptr))
         } else {
@@ -501,7 +501,7 @@ impl<N: NativeRefCounted> RCHandle<N> {
     /// Returns None if the pointer is null.
     /// Increases the reference count.
     #[inline]
-    pub(crate) fn from_unshared_ptr(ptr: *mut N) -> Option<Self> {
+    pub fn from_unshared_ptr(ptr: *mut N) -> Option<Self> {
         ptr.into_option().map(|ptr| {
             unsafe { (*ptr)._ref() };
             Self(ptr)
@@ -510,7 +510,7 @@ impl<N: NativeRefCounted> RCHandle<N> {
 
     /// Create a reference to the Rust wrapper from a reference to a pointer that points
     /// to the native type.
-    pub(crate) fn from_unshared_ptr_ref(n: &*mut N) -> &Option<Self> {
+    pub fn from_unshared_ptr_ref(n: &*mut N) -> &Option<Self> {
         unsafe { transmute_ref(n) }
     }
 }
