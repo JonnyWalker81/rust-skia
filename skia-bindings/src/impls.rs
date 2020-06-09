@@ -7,10 +7,13 @@
 //! See also: https://github.com/rust-lang/rfcs/issues/1880
 
 use crate::{
-    SkAlphaType, SkBlendMode, SkBlendModeCoeff, SkImage_CompressionType,
+    SkAlphaType, SkBlendMode, SkBlendModeCoeff, SkImageFilter, SkImage_CompressionType,
     SkImage_kCompressionTypeCount, SkPathFillType, SkPathVerb,
 };
 use std::ffi::CStr;
+
+unsafe impl Send for SkImageFilter {}
+unsafe impl Sync for SkImageFilter {}
 
 impl SkBlendMode {
     pub fn as_coeff(self) -> Option<(SkBlendModeCoeff, SkBlendModeCoeff)> {
