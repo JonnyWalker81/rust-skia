@@ -75,6 +75,8 @@ impl RCHandle<SkFontStyleSet> {
 }
 
 pub type FontMgr = RCHandle<SkFontMgr>;
+unsafe impl Sync for FontMgr {}
+unsafe impl Send for FontMgr {}
 
 impl NativeBase<SkRefCntBase> for SkFontMgr {}
 
